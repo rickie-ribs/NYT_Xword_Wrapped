@@ -33,6 +33,24 @@ Common flags:
 - `--port <port>` — change server port (default: 8000)
 - `--build-year <year>` — pass the year to `build_puzzle_data.py`
 
+---
+
+### Getting your NYT session cookie
+
+1. Log in to nytimes.com with the account that has your crossword subscription.
+2. Open DevTools:
+   - Chrome / Edge: Menu → More Tools → Developer Tools → Application → Storage → Cookies → `https://nytimes.com`
+   - Firefox: Tools → Web Developer → Storage Inspector → Cookies → `nytimes.com`
+   - Safari: Develop → Show Web Inspector → Storage → Cookies → `nytimes.com`
+3. Find the cookie named `NYT-S` and copy its **value** (the long token string).
+4. Create a file named `subscription_header.txt` in the repository root and paste either:
+   - `NYT-S=your_token_here`  OR
+   - `your_token_here`  (the scripts accept both formats)
+
+---
+
+# Step by Step Scripting
+
 If you prefer to run steps manually, run them in order:
 
 1. Build puzzle metadata (writes `data_output/puzzle_data.json`)
