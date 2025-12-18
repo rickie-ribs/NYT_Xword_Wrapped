@@ -102,6 +102,11 @@ This project uses the following two requests to NYT. Successful execution of the
 
 This project requires an NYT session cookie to fetch per-puzzle data. Do NOT commit your `subscription_header.txt` file or any cookies to source control. 
 
+**Data & NYT Content Notice**
+
+- This repository contains personal analytics built from data fetched from the New York Times service for your own account. You are responsible for complying with NYT's Terms of Service. Do not redistribute NYT puzzle content or per-user completion data from this repository (including under `data_output/`) unless you have the right to do so.
+- Public distribution of fetched NYT content may violate NYT terms; the code is provided for personal analytics and research only.
+
 ---
 
 ## Development & Notes 💡
