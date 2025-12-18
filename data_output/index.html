@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NYT Crossword 2025 Wrapped</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-frame">
+    <div class="app-container">
+
+        <section id="card-0" class="card">
+            <div class="hero-background-overlay"></div>
+            <div class="hero-content">
+                <div class="mastery-crown">👑</div> <h1 class="hero-year">2025</h1>
+                <p class="hero-subtitle">YOUR YEAR OF PUZZLING MASTERY</p>
+                <div class="hero-divider"></div>
+                <p class="hero-cta">FOLLOW ALONG TO UNWRAP YOUR STATS</p>
+            </div>
+        </section>
+        
+        <section id="card-1" class="card hidden">
+            <div class="hero-background-overlay"></div>
+
+            <div class="card-content">
+                <h2 class="section-title">YOUR 2025 IN CROSSWORDS</h2>
+
+                <div class="stat-group">
+                    <div class="stat-large stat-box">
+                        <div id="total-puzzles" class="stat-number gradient-text">...</div>
+                        <p class="stat-description">PUZZLES SOLVED</p>
+                    </div>
+                    
+                    <div class="stat-large stat-box">
+                        <div id="gold-star-puzzles" class="stat-number gradient-text">...</div>
+                        <p class="stat-description">WITHOUT HINTS</p>
+                    </div>
+                </div>
+
+                <div class="chart-container achievement-container">
+                    <canvas id="completion-chart"></canvas>
+                    <div class="chart-center-text donut-overlay">
+                        <div id="completion-rate" class="chart-rate-number">...</div>
+                        <div id="hint-difference" class="chart-difference-stat"></div> 
+                    </div>
+                </div>
+                
+                <div class="time-summary">
+                    <p class="time-description">THIS YEAR, YOU SPENT:</p>
+                    <div class="stat-medium time-value" id="total-time"></div>
+                    <p class="time-description">SOLVING NYT CROSSWORDS</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="card-2" class="card hidden">
+            <div class="hero-background-overlay"></div>
+            <h2 class="card-title">DAILY TIMING SUMMARY</h2>
+            <div id="card2-legend" class="chart-legend"></div>
+            <div class="chart-container-2">
+                <div id="weekly-average-chart"></div>
+            </div>
+            
+            <p class="chart-insight" id="easiest-hardest"></p>
+        </section>
+
+        <section id="card-3" class="card hidden">
+            <div class="hero-background-overlay"></div>
+            <h2 class="card-title">TIMING DISTRIBUTION BY DAY</h2>
+            <p class="card-subtitle">A forensic look at your solve velocity across the week.</p>
+            <div class="chart-container-3" id="daily-histograms-container"></div>
+        </section>
+
+        <section id="card-4" class="card hidden">
+            <div class="hero-background-overlay"></div>
+            <h2 class="card-title">YOUR YEAR-LONG ACCELERATION</h2>
+            <p class="card-subtitle">Tracking the trend in your average time for every day of the week.</p>
+            <div id="card4-legend" class="chart-legend hidden"></div> 
+            <div class="chart-container-4" id="year-trend-chart-container">
+                <div id="normalized-trend-chart"></div> 
+                <div id="trend-summary-container" class="trend-summary hidden">
+                    <p id="trend-text"></p>
+                </div>
+            </div>
+            </section>
+        
+        <section id="card-5" class="card hidden">
+            <h2 class="card-title">THE HALL OF GRINDS</h2>
+            <p class="card-subtitle">Puzzles that pushed your skills—and the clock—to the limit.</p>
+            <div class="list-container-5">
+                <table id="hardest-puzzles-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th style="text-align: center;">Constructor</th>
+                            <th style="text-align: center;">Time</th>
+                            <th style="text-align: center;">% > Avg</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+                <div id="stumped-authors-summary" style="opacity: 0;"> </div>
+            </div>
+        </section>
+
+        <section id="card-6" class="card hidden">
+            <h2 class="card-title">ON A ROLL</h2>
+            <p class="card-subtitle">Your most effortless clean sweeps of the 2025 calendar.</p>
+            <div class="list-container-6">
+                <table id="easiest-puzzles-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th style="text-align: center;">Constructor</th>
+                            <th style="text-align: center;">Time</th>
+                            <th class="right-align">% &lt; Avg</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="card-7" class="card hidden">
+            <h2 class="card-title">SOLVE REPLAY</h2>
+            <p class="card-subtitle">...</p>
+            <div id="replay-metadata">
+                <div id="replay-progress-container">
+                    <div id="replay-progress-fill"></div>
+                </div>
+                <div id="replay-timer">00:00</div>
+            </div>
+            <div id="crossword-replay-container"> </div>
+            <div id="replay-chart-wrapper">
+                <div id="replay-chart-container"></div>
+            </div>
+        </section>
+
+        <section id="card-8" class="card hidden">
+            <div class="hero-background-overlay"></div>
+            <div class="hero-content">
+                <div class="mastery-crown">👑</div> <h1 class="hero-year">2025</h1>
+                <p class="hero-subtitle">YOUR YEAR OF PUZZLING MASTERY</p>
+            </div>
+        </section>
+    </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

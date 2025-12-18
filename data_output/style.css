@@ -1,0 +1,735 @@
+/* The fixed frame */
+.app-frame {
+  width: 504px;
+  height: 960px;
+  transform-origin: center center;
+  overflow: hidden; /* prevents page scroll inside frame */
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  background: var(--app-bg, #080808);
+}
+
+/* Ensure the existing app uses the full frame */
+.app-frame .app-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* Fallback styling for very small windows */
+@media (max-width: 504px), (max-height: 960px) {
+  .app-frame { max-width: 100%; max-height: 100%; }
+}
+
+/* --- Global & Typography Reset --- */
+:root {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --accent-color: #ffc600; /* Gold/Yellow */
+    --secondary-color: #4CAF50; /* Green accent for fast */
+    --danger-color: #F44336; /* Red accent for slow */
+    --card-bg: #1e1e1e;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- App Container (Restricts Viewport for Mobile) --- */
+.app-container {
+    width: 100%;
+    max-width: 500px; /* Standard mobile width */
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* --- Card Styles (Full-Screen Slide) --- */
+.card {
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 0.8s ease-in-out, opacity 0.5s;
+}
+
+.card.hidden {
+    /* Initially off-screen, ready to slide in */
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.card.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.card.leaving{
+    /* Sliding off-screen when transitioning */
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+/* --- Card 1: Typography and Stats --- */
+.card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 00px;
+    margin-top: 0px;
+    color: var(--accent-color);
+}
+
+.stat-large {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--text-color);
+    line-height: 1.1;
+    margin-top: 10px;
+}
+
+.stat-medium {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 16px;
+}
+.stat-group {
+    display: flex;
+    justify-content: center; /* Center the entire group */
+    gap: 40px; /* Space between the two stat items */
+    margin-bottom: 20px;
+}
+
+.stat-description {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #b0b0b0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 30px;
+}
+
+.time-description {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #b0b0b0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0px;
+}
+
+#completion-chart {
+    display: block;
+}
+
+.chart-container {
+    position: relative; 
+    width: 200px; 
+    height: 200px; 
+    margin: 0 auto; 
+}
+
+.chart-center-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-color);
+}
+
+/* --- Card 2: Bar Chart Specifics --- */
+.card-subtitle {
+    font-size: 1rem;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+}
+
+.chart-container-2 {
+    width: 90%;
+    margin-top: 0px;
+}
+
+.chart-container-3 {
+    width: 90%;
+    margin-top: 0px;
+}
+
+/* D3 bar styling */
+.bar {
+    fill: var(--accent-color);
+    transition: fill 0.5s ease;
+}
+
+.day-label {
+    font-weight: 800;
+    letter-spacing: 1px;
+    fill: #fff;
+    font-size: 14px;
+}
+
+.grid-line {
+    stroke: rgba(255, 255, 255, 0.05); /* Very faint ghost lines */
+    stroke-dasharray: 2,2;
+    pointer-events: none;
+}
+
+.value-label {
+    fill: var(--text-color);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.chart-insight {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 40px;
+    padding: 0 10px;
+}
+
+/* Pulse effect for the end markers */
+@keyframes pulse-marker {
+    0% { r: 4; opacity: 1; }
+    50% { r: 6; opacity: 0.7; }
+    100% { r: 4; opacity: 1; }
+}
+
+circle {
+    animation: pulse-marker 3s infinite ease-in-out;
+}
+#year-trend-chart-container {
+    width: 100%;
+    min-height: 710px;
+}
+.trend-summary {
+    margin-top: 10px;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color);
+    transition: opacity 2s ease;
+}
+
+.trend-summary.hidden {
+    opacity: 0;
+}
+
+#trend-text {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    color: #ccc;
+}
+
+.highlight-day {
+    font-weight: bold;
+    color: #fff;
+}
+
+.highlight-date {
+    color: #fff;
+    font-weight: 500;
+}
+
+.chart-legend {
+    display: flex;
+    justify-content: center; /* Center the legend items */
+    gap: 10px; /* Space between the items */
+    margin-top: 0px;
+    padding: 5px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.legend-item svg {
+    margin-right: 5px;
+}
+
+.domain {
+    stroke: rgba(255, 255, 255, 0.2) !important;
+}
+
+.day-histogram-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3px; /* Space between each day's chart */
+    text-align: center;
+} 
+
+.histogram-day-label {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--text-color);
+    width: 40px;
+    text-align: right;
+    margin-right: 5px;
+}
+
+.histogram-chart-area {
+    flex-grow: 1; 
+    min-width: 0; /* Allow flex child to shrink to prevent overflow */
+}
+
+.histogram-chart-area svg {
+    display: block;
+    width: 100%;
+    height: auto;
+} 
+
+#hardest-puzzles-table, #easiest-puzzles-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+#hardest-puzzles-table th {
+    padding: 8px 5px;
+    border-bottom: 2px solid var(--accent-color);
+    text-align: left;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+#hardest-puzzles-table td {
+    padding: 10px 10px;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+}
+
+#easiest-puzzles-table th {
+    padding: 8px 5px;
+    border-bottom: 2px solid var(--accent-color);
+    text-align: left;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+#easiest-puzzles-table td {
+    padding: 10px 10px;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+}
+
+.right-align {
+    text-align: right !important;
+}
+
+.left-align {
+    text-align: left !important;
+}
+
+/* Style the deviation cell for emphasis */
+.deviation-cell {
+    color: var(--danger-color, #e74c3c); /* Use a strong color for high deviation */
+    font-weight: bold;
+}
+
+#easiest-puzzles-table tbody tr:nth-child(odd) {
+    background-color: #292929; /* Very dark grey */
+}
+#easiest-puzzles-table tbody tr:nth-child(even) {
+    background-color: #121212; /* Slightly darker */
+}
+
+#hardest-puzzles-table tbody tr:nth-child(odd) {
+    background-color: #292929; /* Very dark grey */
+}
+#hardest-puzzles-table tbody tr:nth-child(even) {
+    background-color: #121212; /* Slightly darker */
+}
+
+/* The animated highlight for the frequent author's name */
+.author-stumped-highlight {
+    animation: pulse-red-shadow 1.5s infinite alternate; /* The animation trigger */
+    display: inline-block; /* Required for the border/highlight to wrap text properly */
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+@keyframes pulse-red-shadow {
+    from {
+        /* Start with a transparent shadow/glow */
+        box-shadow: 0 0 0 0px rgba(231, 76, 60, 0.0);
+    }
+    to {
+        /* End with a deep, offset shadow/glow */
+        box-shadow: 0 0 5px 2px rgba(231, 76, 60, 0.8), 
+                    0 0 0 2px #e74c3c; /* A thin solid red border lookalike */
+    }
+}
+
+/* The summary message below the table */
+#stumped-authors-summary {
+    /* 1. THE "INSIGHT CARD" VISUALS */
+    margin-top: 30px;
+    padding: 15px 25px;
+    background: rgba(231, 76, 60, 0.08); /* Faint red tint */
+    border-top: 2px solid #e74c3c;
+    border-bottom: 1px solid rgba(231, 76, 60, 0.2);
+    border-radius: 4px;
+    
+    color: #e74c3c;
+    font-style: italic;
+    font-size: 1.2em;
+    text-align: center;
+    
+    /* 2. THE "ANIMATION" INITIAL STATE */
+    /* This makes it hidden and 'dropped down' initially */
+    opacity: 0;
+    transform: translateY(15px); 
+    
+    /* 3. THE TRANSITION DEFINITION */
+    /* This tells the browser HOW to move when JS changes the opacity/transform */
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#fastest-puzzle-summary {
+    /* 1. THE "INSIGHT CARD" VISUALS */
+    margin-top: 30px;
+    padding: 15px 25px;
+    background: rgba(94, 231, 60, 0.08); 
+    border-top: 2px solid rgb(94, 231, 60);
+    border-bottom: 1px solid rgba(294, 231, 60, 0.2);
+    border-radius: 4px;
+    
+    color: rgb(94, 231, 60);;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 1.2em;
+    text-align: center;
+    
+    /* 2. THE "ANIMATION" INITIAL STATE */
+    /* This makes it hidden and 'dropped down' initially */
+    opacity: 0;
+    transform: translateY(15px); 
+    
+    /* 3. THE TRANSITION DEFINITION */
+    /* This tells the browser HOW to move when JS changes the opacity/transform */
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Small spacing helpers for the fastest-solve message lines */
+#fastest-puzzle-summary .fastest-line {
+    display: block; /* ensure each line stacks vertically */
+    line-height: 1.1; /* slightly tighter baseline */
+}
+
+/* Add a few pixels between consecutive lines */
+#fastest-puzzle-summary .fastest-line + .fastest-line {
+    margin-top: 4px; /* a subtle 4px gap between lines */
+}
+
+#crossword-replay-container {
+    display: grid;
+    gap: 1px;
+    margin: 5px auto;
+    background-color: #333; /* Border color between cells */
+    border: 1px solid #333;
+    padding: 1px;
+    width: fit-content;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.cw-cell {
+    width: 30px;
+    height: 30px;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-family: sans-serif;
+    font-size: 1.2em;
+    color: #000;
+    text-transform: uppercase;
+}
+
+/* Black squares */
+.cw-cell.blank {
+    background-color: #121212;
+}
+
+/* Hidden letters initially */
+.cw-letter {
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.2s ease-out, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Revealed letters */
+.cw-letter.revealed {
+    opacity: 1;
+    transform: scale(1);
+}
+
+#replay-metadata {
+    text-align: center;
+    margin-top: 0px;
+    width: 400px;
+    font-family: monospace;
+    font-size: 1.5em;
+    color: var(--accent-color);
+}
+
+#replay-subtitle {
+    text-align: center;
+    margin-top: 15px;
+    width: 390px;
+    font-family: monospace;
+    font-size: 1.5em;
+    color: var(--accent-color);
+}
+
+#replay-progress-container {
+    width: 100%;
+    max-width: 450px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    margin: 10px auto 10px auto;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+}
+
+#replay-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #f1c40f, #e67e22);
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.6);
+    border-radius: 6px;
+    width: 0%;
+}
+
+#replay-chart-wrapper {
+    width: 100%;
+    max-width: 450px;
+    margin: 5px auto;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+}
+
+#replay-chart-container svg {
+    display: block;
+    margin: 0 auto;
+}
+
+#replay-timer {
+    font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #f1c40f;
+    letter-spacing: -1px;
+    text-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+}
+
+.replay-axis path,
+.replay-axis line {
+    stroke: #555;
+}
+
+.replay-axis text {
+    fill: #888;
+    font-size: 10px;
+    font-family: monospace;
+}
+
+#card-0 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtly hint at the puzzle theme in the background */
+.hero-background-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px; /* Looks like a crossword grid */
+    mask-image: radial-gradient(circle, black 30%, transparent 80%);
+}
+
+.hero-content {
+    z-index: 1;
+    text-align: center;
+}
+
+.mastery-crown {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+    animation: float 3s ease-in-out infinite;
+}
+
+.hero-year {
+    font-size: 8rem;
+    font-weight: 900;
+    margin: 0;
+    background: linear-gradient(to bottom, #fff 40%, #888 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -5px;
+    line-height: 1;
+}
+
+.hero-subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 6px;
+    color: var(--accent-color, #FF9900);
+    margin-top: 10px;
+    font-weight: 300;
+}
+
+.hero-divider {
+    width: 60px;
+    height: 3px;
+    background: var(--accent-color, #FF9900);
+    margin: 30px auto;
+    border-radius: 2px;
+}
+
+.hero-cta {
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: #555;
+}
+
+.pulse-active{
+    animation: pulse-opacity 2s infinite;
+}
+
+/* Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-opacity {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.section-title {
+    color: var(--accent-color);
+    letter-spacing: 4px;
+    font-size: 0.9rem;
+    margin-bottom: 40px;
+    opacity: 0.8;
+}
+
+.stat-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 12px;
+    min-width: 140px;
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gradient-text {
+    display: block;
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(to bottom, #fff 30%, var(--accent-color) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 5px;
+} 
+
+/* Donut container polish */
+.achievement-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 30px;
+}
+
+.donut-overlay {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.chart-rate-number {
+    font-size: 2.2rem;
+    display: block;
+    font-weight: 800;
+    background: linear-gradient(to bottom, #fff3a0 0%, #ffc600 50%, #e67e22 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.chart-difference-stat {
+    display: block;
+    font-size: 0.7em; 
+    font-weight: 600;
+    background: linear-gradient(to bottom, #2c3e50 0%, #4d88f9 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 5px; /* Space below the main percentage */
+}
+
+/* Time Summary styling */
+.time-summary {
+    margin-top: 30px;
+}
+
+.time-value {
+    font-size: 1.8rem;
+    color: #fff;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+.apply-shake {
+  animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+}

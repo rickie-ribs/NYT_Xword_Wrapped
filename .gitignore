@@ -1,0 +1,27 @@
+# NYT cookie file — do not commit
+subscription_header.txt
+
+# Generated data output files (ignore specific generated assets)
+data_output/card_data/
+data_output/puzzle_completion_data/
+data_output/puzzle_data.csv
+data_output/puzzle_data.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv/
+venv/
+
+# Editor/project files
+.DS_Store
+.idea/
+.vscode/
+
+# Build/dist
+build/
+dist/
+*.egg-info/

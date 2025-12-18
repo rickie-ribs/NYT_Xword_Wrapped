@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install pip
+        run: python -m pip install --upgrade pip
+
+      - name: Syntax check
+        run: |
+          set -e
+          python -m py_compile $(git ls-files '*.py' | tr '\n' ' ')
+
+      - name: Smoke-run server
+        run: |
+          set -e
+          # start the server-only mode (skip fetching) and verify it's responding
+          python3 run_all.py --no-build --no-fetch --no-flatten --no-pipeline --no-browser --port 8010 &
+          pid=$!
+          sleep 2
+          curl -I http://localhost:8010/
+          kill $pid || true
