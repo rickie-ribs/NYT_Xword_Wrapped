@@ -1,4 +1,4 @@
-# XWORD_STATS
+# NYT_Xword_Wrapped
 
 NYT CROSSWORD WRAPPED
 
