@@ -108,7 +108,7 @@ function renderDayHistogram(containerId, chartData, maxFrequency) {
         .domain([0, maxFrequency * 1.1])
         .range([height, 0]);
 
-    // Draw Ghost Grid Lines (Vertical)
+    /*// Draw Ghost Grid Lines (Vertical)
     svg.selectAll(".grid-line")
         .data(x.ticks(chartData.length))
         .enter().append("line")
@@ -118,7 +118,7 @@ function renderDayHistogram(containerId, chartData, maxFrequency) {
         .attr("y1", 0)
         .attr("y2", height)
         .attr("stroke", "rgba(255,255,255,0.05)")
-        .attr("stroke-dasharray", "2,2");
+        .attr("stroke-dasharray", "2,2"); */
 
     // --- DRAW BARS ---
     svg.selectAll(".hist-bar")
