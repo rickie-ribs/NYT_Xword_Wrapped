@@ -1,6 +1,6 @@
 /* The fixed frame */
 .app-frame {
-  width: 504px;
+  width: 540px;
   height: 960px;
   transform-origin: center center;
   overflow: hidden; /* prevents page scroll inside frame */

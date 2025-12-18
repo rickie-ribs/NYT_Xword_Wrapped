@@ -13,7 +13,8 @@ This repository collects NYT puzzle metadata and your per-puzzle completion data
 Prerequisites:
 - Python 3.8+ (3.10+ recommended)
 - `curl` available on PATH (used by `fetch_puzzles.py`)
-- Valid NYT session cookie saved in `subscription_header.txt` (see Security note)
+- Valid NYT session cookie saved in `subscription_header.txt` (see next section for instructions)
+- Note: the webapp is designed to fill a 540x960 frame, so you may need to scale your browswer to fit if parts are getting cut off. 
 
 Run the full pipeline and serve the web app:
 
@@ -23,7 +24,7 @@ Run the full pipeline and serve the web app:
 python3 run_all.py
 ```
 
-Common flags:
+Supported flags (all optional):
 - `--no-build` — skip `build_puzzle_data.py`
 - `--no-fetch` — skip `fetch_puzzles.py`
 - `--no-flatten` — skip `flatten_results_to_csv.py`
@@ -35,7 +36,7 @@ Common flags:
 
 ---
 
-### Getting your NYT session cookie
+## Getting your NYT session cookie
 
 1. Log in to nytimes.com with the account that has your crossword subscription.
 2. Open DevTools:
@@ -49,7 +50,7 @@ Common flags:
 
 ---
 
-# Step by Step Scripting
+## Step by Step Scripting
 
 If you prefer to run steps manually, run them in order:
 
