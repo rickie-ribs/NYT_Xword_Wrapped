@@ -1642,7 +1642,7 @@ function fitAppFrame() {
   if (!frame) return;
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const scale = Math.min(vw / 504, vh / 960, 1); // don't scale up >1
+  const scale = Math.min(vw / 540, vh / 960, 1); // don't scale up >1
   frame.style.transform = `scale(${scale})`;
 }
 window.addEventListener('resize', fitAppFrame);
