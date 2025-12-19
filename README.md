@@ -4,7 +4,13 @@ NYT CROSSWORD WRAPPED
 
 Crossword solve analytics and personal NYT Crossword tracking.
 
-This repository collects NYT puzzle metadata and your per-puzzle completion data, processes it into summarized views, and provides a static web UI for interactive visualization.
+This project collects NYT puzzle metadata and your per-puzzle completion data, processes it into summarized views, and provides a static web UI for interactive visualization. Use arrow keys or space-bar to move through the different pages of the app once launched.
+
+I have included a sample of the intended output as a video showing me moving through the webapp.
+
+- Has this been thoroughly tested with many possible combinations of completion scenarios? **Nope.**
+- Are the visuals and calculations skewed towards or enlightened by my own personal stats? **Potentially.**
+- Was this created with AI? **I mean yeah - it's 2025. Gemini wrote a lot of the code and helped with finalizing details.**
 
 ---
 
@@ -23,6 +29,8 @@ Run the full pipeline and serve the web app:
 # gather all necessary crossword data, construct the summarized views, then launch web app
 python3 run_all.py
 ```
+
+Use arrow keys or space-bar to move through the different pages of the app once launched.
 
 Supported flags (all optional):
 - `--no-build` — skip `build_puzzle_data.py`
